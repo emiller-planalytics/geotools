@@ -27,6 +27,7 @@
   <artifactId>gt-shapefile</artifactId>
   <packaging>jar</packaging>
   <name>Shapefile module</name>
+  <version>10.4-PX</version>
   
 
   <scm>
@@ -141,7 +142,7 @@
     <dependency>
       <groupId>org.geotools</groupId>
       <artifactId>gt-data</artifactId>
-      <version>${project.version}</version>
+      <version>10.4</version>
     </dependency>
 
     <dependency>
@@ -152,14 +153,14 @@
     <dependency>
       <groupId>org.geotools</groupId>
       <artifactId>gt-sample-data</artifactId>
-      <version>${project.version}</version>
+      <version>10.4</version>
       <scope>test</scope>
     </dependency>
     
     <dependency>
       <groupId>org.geotools</groupId>
       <artifactId>gt-epsg-hsql</artifactId>
-      <version>${project.version}</version>
+      <version>10.4</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
