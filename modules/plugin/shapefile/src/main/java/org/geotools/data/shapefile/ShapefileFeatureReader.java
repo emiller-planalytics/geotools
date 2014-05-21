@@ -70,6 +70,8 @@ class ShapefileFeatureReader implements FeatureReader<SimpleFeatureType, SimpleF
     
     private boolean peeked;
 
+    boolean nextFeatureBuilt;
+
     
     public ShapefileFeatureReader(SimpleFeatureType schema, ShapefileReader shp, DbaseFileReader dbf, IndexedFidReader fidReader)
             throws IOException {
@@ -168,6 +170,7 @@ class ShapefileFeatureReader implements FeatureReader<SimpleFeatureType, SimpleF
             Envelope envelope = record.envelope();
             boolean skip = false;
             peeked = false;
+            nextFeatureBuilt = false;
             Geometry geometry = null;
             Row row = null;
             if(schema.getGeometryDescriptor() != null) {
@@ -184,7 +187,7 @@ class ShapefileFeatureReader implements FeatureReader<SimpleFeatureType, SimpleF
                         } else if (screenMap != null && screenMap.checkAndSet(envelope)) {
                             geometry = null;
                             skip = true;
-                        } else {
+                        } else if (!nextFeatureBuilt) {
                             // if we are using the screenmap better provide a slightly modified
                             // version of the geometry bounds or we'll end up with many holes
                             // in the rendering
@@ -203,6 +206,8 @@ class ShapefileFeatureReader implements FeatureReader<SimpleFeatureType, SimpleF
                 // also grab the dbf row
                 if (dbf != null && !peeked) {
                     row = dbf.readRow();
+                }
+                if (!nextFeatureBuilt) {
                     nextFeature = buildFeature(record.number, geometry, row);
                 }
             } else {
@@ -227,6 +232,7 @@ class ShapefileFeatureReader implements FeatureReader<SimpleFeatureType, SimpleF
         boolean filtered = !filter.evaluate(feature);
         if (!filtered) {
             nextFeature = feature;
+            nextFeatureBuilt = true;
         }
 
         return filtered;
